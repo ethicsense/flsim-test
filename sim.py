@@ -19,7 +19,7 @@ parser = argparse.ArgumentParser(description="Tutorial on using multi-node Flowe
 parser.add_argument(
     "--num_cpus",
     type=int,
-    default=1,
+    default=2,
     help="Number of CPUs to assign to a virtual client",
 )
 parser.add_argument(
@@ -28,7 +28,7 @@ parser.add_argument(
     default=0.0,
     help="Ratio of GPU memory to assign to a virtual client",
 )
-parser.add_argument("--multi_node", type=bool, default=False, help="Use in multi-node mode or not")
+parser.add_argument("--multi_node", type=bool, default=True, help="Use in multi-node mode or not")
 parser.add_argument("--num_rounds", type=int, default=10, help="Number of FL rounds.")
 
 NUM_CLIENTS = 100
@@ -211,7 +211,11 @@ def main():
     }
 
     if args.multi_node:
-        ray_init_args = {"address" : "auto","runtime_env" : {"py_modules" : [mak]}} #if multi-node cluster is used
+        ray_init_args = {
+            "address" : "auto",
+            "runtime_env" : {"py_modules" : [mak]},
+            "include_dashboard" : True
+        }
     else:
         ray_init_args = {}
 
